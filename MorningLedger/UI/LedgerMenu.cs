@@ -36,23 +36,32 @@ internal sealed class LedgerMenu : IClickableMenu
         this.title = title;
         this.dateText = dateText;
         Layout();
-        BuildRows();
     }
 
     private int VisibleRows => Math.Max(1, content.Height / RowHeight);
 
+    /// <summary>Sizes the panel to fit its rows (up to the screen height), so a quiet morning gets a small panel.</summary>
     private void Layout()
     {
         int w = Math.Min(980, Game1.uiViewport.Width - 64);
-        int h = Math.Min(760, Game1.uiViewport.Height - 96);
+        int maxHeight = Math.Min(760, Game1.uiViewport.Height - 96);
+        BuildRows(w - SidePadding * 2);
+
+        int h = Math.Clamp(HeaderSpace + 40 + Math.Max(rows.Count, 3) * RowHeight, 260, maxHeight);
         initialize((Game1.uiViewport.Width - w) / 2, (Game1.uiViewport.Height - h) / 2 + 16, w, h, showUpperRightCloseButton: true);
         content = new Rectangle(xPositionOnScreen + SidePadding, yPositionOnScreen + HeaderSpace, width - SidePadding * 2, height - HeaderSpace - 32);
+        ClampScroll();
     }
 
-    private void BuildRows()
+    private void ClampScroll()
+    {
+        scroll = Math.Clamp(scroll, 0, Math.Max(0, rows.Count - VisibleRows));
+    }
+
+    private void BuildRows(int contentWidth)
     {
         rows.Clear();
-        int textWidth = content.Width - IconSize - 16;
+        int textWidth = contentWidth - IconSize - 16;
 
         foreach (LedgerSection section in sections)
         {
@@ -73,8 +82,6 @@ internal sealed class LedgerMenu : IClickableMenu
                 AddWrapped(line.Text, line.Color ?? Game1.textColor, icon, source, textWidth);
             }
         }
-
-        scroll = Math.Clamp(scroll, 0, Math.Max(0, rows.Count - VisibleRows));
     }
 
     private void AddWrapped(string text, Color color, Texture2D? icon, Rectangle source, int textWidth)
@@ -139,14 +146,15 @@ internal sealed class LedgerMenu : IClickableMenu
             if (!collapsed.Remove(key))
                 collapsed.Add(key);
             Game1.playSound("smallSelect");
-            BuildRows();
+            // Keep the panel where it is so the header stays under the cursor.
+            BuildRows(content.Width);
+            ClampScroll();
         }
     }
 
     public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
     {
         Layout();
-        BuildRows();
     }
 
     public override void draw(SpriteBatch b)
