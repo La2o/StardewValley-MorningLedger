@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- Added a Nexus Mods update key, so SMAPI can check Nexus as well as GitHub for new versions.
+
 ## 1.0.0
 
 First release.
