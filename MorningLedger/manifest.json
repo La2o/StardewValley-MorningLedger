@@ -6,5 +6,5 @@
   "UniqueID": "La2o.MorningLedger",
   "EntryDll": "MorningLedger.dll",
   "MinimumApiVersion": "4.0.0",
-  "UpdateKeys": [ "GitHub:La2o/StardewValley-MorningLedger" ]
+  "UpdateKeys": [ "Nexus:54688", "GitHub:La2o/StardewValley-MorningLedger" ]
 }

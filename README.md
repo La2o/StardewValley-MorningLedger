@@ -36,7 +36,7 @@ Popular mods like Lookup Anything, Data Layers, and UI Info Suite 2 show details
 ## Install
 
 1. Install [SMAPI](https://smapi.io) 4.0 or newer.
-2. Download the latest `MorningLedger` zip from [Releases](https://github.com/La2o/StardewValley-MorningLedger/releases).
+2. Download the latest version from [Nexus Mods](https://www.nexusmods.com/stardewvalley/mods/54688) or [GitHub Releases](https://github.com/La2o/StardewValley-MorningLedger/releases).
 3. Unzip it into `Stardew Valley/Mods`.
 4. Launch the game through SMAPI.
 
