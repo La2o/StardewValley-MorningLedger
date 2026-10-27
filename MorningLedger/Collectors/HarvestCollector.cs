@@ -52,17 +52,10 @@ internal static class HarvestCollector
             .ToList();
     }
 
-    /// <summary>The item a crop produces, including forage crops like spring onions that don't set indexOfHarvest.</summary>
+    /// <summary>The item a planted crop produces. Wild forage crops (spring onions, ginger) return null so they aren't listed as the player's harvest.</summary>
     internal static string? CropHarvestId(Crop crop)
     {
-        if (crop.forageCrop.Value)
-            return crop.whichForageCrop.Value switch
-            {
-                "1" => "(O)399", // spring onion
-                "2" => "(O)829", // ginger
-                _ => null
-            };
-        return crop.indexOfHarvest.Value;
+        return crop.forageCrop.Value ? null : crop.indexOfHarvest.Value;
     }
 
     /// <summary>Nights of growth left before the crop can be harvested, assuming it gets watered.</summary>
