@@ -1,0 +1,10 @@
+{
+  "Name": "Morning Ledger",
+  "Author": "ygsnaffy",
+  "Version": "1.0.0",
+  "Description": "A daily planner that opens each morning: crops ready to harvest, upcoming birthdays, bundle items in your bag, and crops that will die at season's end.",
+  "UniqueID": "ygsnaffy.MorningLedger",
+  "EntryDll": "MorningLedger.dll",
+  "MinimumApiVersion": "4.0.0",
+  "UpdateKeys": []
+}
