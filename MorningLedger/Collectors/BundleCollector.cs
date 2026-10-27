@@ -15,7 +15,8 @@ internal static class BundleCollector
             || master.hasCompletedCommunityCenter())
             return null;
 
-        var result = new List<BundleEntry>();
+        // Some bundles ask for the same item in more than one slot (Construction wants Wood twice), so merge those.
+        var needs = new Dictionary<(string Bundle, string Room, string ItemId, int Quality), int>();
         var progress = Game1.netWorldState.Value.Bundles;
 
         // Keys look like "Pantry/0"; values are "name/reward/id count quality .../color/required/sprite/displayName".
@@ -53,12 +54,19 @@ internal static class BundleCollector
                 int.TryParse(items[slot * 3 + 1], out int needed);
                 int.TryParse(items[slot * 3 + 2], out int quality);
 
-                int carried = Game1.player.Items
-                    .Where(item => item is not null && item.QualifiedItemId == qualifiedId && item.Quality >= quality)
-                    .Sum(item => item.Stack);
-                if (carried > 0)
-                    result.Add(new BundleEntry(bundleName, RoomDisplayName(room), qualifiedId, Math.Max(needed, 1), quality, carried));
+                var needKey = (bundleName, RoomDisplayName(room), qualifiedId, quality);
+                needs[needKey] = needs.GetValueOrDefault(needKey) + Math.Max(needed, 1);
             }
+        }
+
+        var result = new List<BundleEntry>();
+        foreach (((string bundle, string roomName, string itemId, int quality), int needed) in needs)
+        {
+            int carried = Game1.player.Items
+                .Where(item => item is not null && item.QualifiedItemId == itemId && item.Quality >= quality)
+                .Sum(item => item.Stack);
+            if (carried > 0)
+                result.Add(new BundleEntry(bundle, roomName, itemId, needed, quality, carried));
         }
 
         return result.OrderBy(e => e.Room).ThenBy(e => e.BundleName).ToList();
