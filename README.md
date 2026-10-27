@@ -1,40 +1,70 @@
 # Morning Ledger
 
-A Stardew Valley 1.6 mod (SMAPI 4) that opens a daily planner each morning. It shows:
+A daily planner for Stardew Valley. Every morning it opens one panel with everything worth knowing today, so you don't need a separate mod for each piece.
 
-- **Ready to harvest:** fully grown crops, garden pots, and fruit trees with fruit, grouped by location. Machines with finished output can be added in config.
-- **Birthdays:** villagers with birthdays in the next 7 days (configurable), plus any loved or liked gifts you're carrying for them.
-- **Bundle items in your bag:** items in your inventory that an unfinished Community Center bundle still needs. This section is hidden once the Community Center is done, on the Joja route, or before you can read the bundles.
-- **Season's end:** outdoor crops that won't survive into next season. Crops that can't mature in time are always listed. In the last week, every crop still in the ground is listed.
+![The Morning Ledger on the farm](docs/screenshots/ledger-overview.jpg)
 
-Press **L** to open or close the ledger at any time. Click a section header to collapse it, and scroll with the mouse wheel, arrow keys, or D-pad.
+## What it shows
 
-## Building
+| Section | What's in it |
+| --- | --- |
+| **Ready to harvest** | Fully grown crops, garden pots, and fruit trees with fruit, grouped by location. Machines with finished output can be included too (off by default). |
+| **Birthdays** | Villagers with birthdays in the next 7 days. Today's birthdays are highlighted until you've given a gift, and it lists loved or liked gifts you're carrying for each person. |
+| **Bundle items in your bag** | Anything in your inventory that an unfinished Community Center bundle still needs, with how many you have against how many it needs. Hidden until you can read the bundles, and on the Joja route or once the Community Center is restored. |
+| **Season's end** | Outdoor crops that won't survive into next season. Crops that can't mature before day 28 are always shown in red. In the last week, every crop still in the ground is listed, so you know what to harvest. |
 
-1. Install the [.NET SDK](https://dotnet.microsoft.com/download) (version 6 or newer), Stardew Valley, and [SMAPI](https://smapi.io).
-2. Run `dotnet build MorningLedger`. The build finds the game automatically when it's in a standard Steam or GOG folder. Otherwise, set the path in `%USERPROFILE%\stardewvalley.targets`:
-   ```xml
-   <Project>
-     <PropertyGroup>
-       <GamePath>D:\Games\Stardew Valley</GamePath>
-     </PropertyGroup>
-   </Project>
-   ```
-3. The build copies the mod into `Stardew Valley/Mods/MorningLedger` and puts a release zip in `MorningLedger/bin/`.
+![Season's end warnings](docs/screenshots/season-end-warning.jpg)
 
-## Testing
+## Controls
 
-Load a save, then type `ledger` in the SMAPI console to print today's ledger. These SMAPI debug commands set up test cases:
+- The ledger opens on its own when you wake up. You can turn this off.
+- **L** opens or closes it at any time.
+- Click a section header to collapse it.
+- Scroll with the mouse wheel, the arrow keys or W/S, or the D-pad.
+- **Esc** or the close button shuts it.
 
-- `debug growcrops 10` grows planted crops so the harvest section fills up.
-- `debug day 26` jumps near season's end for the season-end section.
-- `player_add name Parsnip` puts a bundle item in your bag.
+## Install
+
+1. Install [SMAPI](https://smapi.io) 4.0 or newer.
+2. Download the latest `MorningLedger` zip from [Releases](https://github.com/La2o/StardewValley-MorningLedger/releases).
+3. Unzip it into `Stardew Valley/Mods`.
+4. Launch the game through SMAPI.
+
+Requires Stardew Valley 1.6 or newer. Tested on 1.6.15 with SMAPI 4.5.2.
 
 ## Config
 
-Edit `config.json` in the mod folder after the first launch, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) in game.
+The mod creates `config.json` in its folder the first time it runs. You can also change these settings in game with [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
 
-## Known limits
+| Setting | Default | What it does |
+| --- | --- | --- |
+| `ToggleKey` | `L` | Opens or closes the ledger. Accepts any SMAPI keybind, like `LeftShift + L`. |
+| `AutoOpen` | `true` | Opens the ledger when you wake up. |
+| `SkipIfEmpty` | `true` | Skips the automatic open on days with nothing to show. |
+| `BirthdayLookaheadDays` | `7` | How many days ahead to list birthdays. |
+| `SeasonEndWarningDays` | `7` | How many days before season's end to start listing every crop that won't survive. |
+| `IncludeMachines` | `false` | Also counts kegs, jars, and other machines with finished output. |
+| `ShowHarvest`, `ShowBirthdays`, `ShowBundles`, `ShowSeasonEnd` | `true` | Turns each section on or off. |
 
+## Console command
+
+Type `ledger` in the SMAPI console to print today's ledger. This helps when reporting a bug.
+
+## Compatibility
+
+- Built for single player, multiplayer, and split-screen, with a separate ledger for each player. Co-op hasn't been tested much yet, so please report any problems.
 - Farmhands in multiplayer only see locations the game has synced to them.
-- The days-until-ready numbers assume the crops get watered.
+- Bundles and crops are read from the game's own data, so remixed bundles and modded crops should work.
+- The days-until-ready numbers assume crops are watered.
+
+## Building from source
+
+1. Install the [.NET SDK](https://dotnet.microsoft.com/download) (version 6 or newer) and SMAPI.
+2. Run `dotnet build MorningLedger`. The build finds the game automatically in standard Steam and GOG folders. Otherwise, set `GamePath` in `%USERPROFILE%\stardewvalley.targets`.
+3. Debug builds deploy straight to `Mods/MorningLedger`. Run `dotnet build MorningLedger -c Release` to create the release zip in `MorningLedger/bin/Release`.
+
+Debug builds also include a test helper. Press **F9** in game to run the setup commands listed in `Mods/MorningLedger/test-commands.txt`. The available commands are `day N`, `mail ID`, `item ID [count]`, `grow`, `warp LOCATION X Y`, and `ledger`. The helper is left out of release builds.
+
+## License
+
+[MIT](LICENSE)
