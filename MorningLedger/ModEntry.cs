@@ -74,6 +74,10 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
+#if DEBUG
+        if (Context.IsWorldReady && e.Pressed.Contains(SButton.F9))
+            RunTestCommands();
+#endif
         if (!Context.IsWorldReady || !config.ToggleKey.JustPressed())
             return;
 
@@ -107,6 +111,60 @@ internal sealed class ModEntry : Mod
             year = Game1.year
         });
     }
+
+#if DEBUG
+    /// <summary>
+    /// Dev builds only: F9 runs each line of test-commands.txt in the mod folder, for setting up test scenarios in game
+    /// (SMAPI 4 can't trigger console commands from code). Commands: day N, mail ID, item ID [count], grow, warp LOCATION X Y, ledger.
+    /// </summary>
+    private void RunTestCommands()
+    {
+        string path = Path.Combine(Helper.DirectoryPath, "test-commands.txt");
+        if (!File.Exists(path))
+            return;
+
+        foreach (string line in File.ReadAllLines(path))
+        {
+            string[] parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0 || parts[0].StartsWith('#'))
+                continue;
+
+            switch (parts[0])
+            {
+                case "day":
+                    Game1.dayOfMonth = int.Parse(parts[1]);
+                    break;
+                case "mail":
+                    Game1.player.mailReceived.Add(parts[1]);
+                    break;
+                case "item":
+                    Game1.player.addItemToInventory(ItemRegistry.Create(parts[1], parts.Length > 2 ? int.Parse(parts[2]) : 1));
+                    break;
+                case "grow":
+                    Utility.ForEachLocation(location =>
+                    {
+                        foreach (var feature in location.terrainFeatures.Values)
+                        {
+                            if (feature is StardewValley.TerrainFeatures.HoeDirt { crop: not null } dirt)
+                                dirt.crop.growCompletely();
+                        }
+                        return true;
+                    });
+                    break;
+                case "warp":
+                    Game1.warpFarmer(parts[1], int.Parse(parts[2]), int.Parse(parts[3]), false);
+                    break;
+                case "ledger":
+                    DumpLedger();
+                    break;
+                default:
+                    Monitor.Log($"[test] unknown command: {line}", LogLevel.Warn);
+                    continue;
+            }
+            Monitor.Log($"[test] {line}", LogLevel.Info);
+        }
+    }
+#endif
 
     private void DumpLedger()
     {
