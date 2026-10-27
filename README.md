@@ -23,7 +23,7 @@ Popular mods like Lookup Anything, Data Layers, and UI Info Suite 2 show details
 | **Bundle items in your bag** | Anything in your inventory that an unfinished Community Center bundle still needs, with how many you have against how many it needs. Hidden until you can read the bundles, and on the Joja route or once the Community Center is restored. |
 | **Season's end** | Outdoor crops that won't survive into next season. Crops that can't mature before day 28 are always shown in red. In the last week, every crop still in the ground is listed, so you know what to harvest. |
 
-![Season's end warnings](docs/screenshots/season-end-warning.png)
+![Haley's birthday, with gift and bundle matches from your bag](docs/screenshots/birthday-at-the-beach.png)
 
 ## Controls
 
