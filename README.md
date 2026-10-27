@@ -73,7 +73,10 @@ Type `ledger` in the SMAPI console to print today's ledger. This helps when repo
 2. Run `dotnet build MorningLedger`. The build finds the game automatically in standard Steam and GOG folders. Otherwise, set `GamePath` in `%USERPROFILE%\stardewvalley.targets`.
 3. Debug builds deploy straight to `Mods/MorningLedger`. Run `dotnet build MorningLedger -c Release` to create the release zip in `MorningLedger/bin/Release`.
 
-Debug builds also include test helpers: **F10** saves a native-resolution screenshot (with the UI) to `Mods/MorningLedger/screenshots`, and **F9** in game to run the setup commands listed in `Mods/MorningLedger/test-commands.txt`. The available commands are `day N`, `mail ID`, `item ID [count]`, `grow`, `warp LOCATION X Y`, and `ledger`. The helper is left out of release builds.
+Debug builds also include two test helpers, which are left out of release builds:
+
+- **F10** saves a native-resolution screenshot, including the UI, to `Mods/MorningLedger/screenshots`.
+- **F9** runs the setup commands listed in `Mods/MorningLedger/test-commands.txt`. The available commands are `day N`, `mail ID`, `item ID [count]`, `grow`, `warp LOCATION X Y`, and `ledger`.
 
 ## License
 
