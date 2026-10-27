@@ -1,0 +1,53 @@
+{
+  "menu.title": "Morning Ledger",
+  "menu.date": "{{season}} {{day}}, Year {{year}}",
+
+  "section.harvest": "Ready to harvest",
+  "section.birthdays": "Birthdays",
+  "section.bundles": "Bundle items in your bag",
+  "section.season-end": "Season's end",
+
+  "harvest.line": "{{location}}: {{count}}x {{item}}",
+  "harvest.machine-line": "{{location}}: {{count}}x {{item}} waiting in machines",
+  "harvest.empty": "Nothing is ready to harvest today.",
+
+  "birthday.today": "{{name}}'s birthday is today!",
+  "birthday.tomorrow": "{{name}}'s birthday is tomorrow.",
+  "birthday.upcoming": "{{name}}: in {{days}} days ({{date}}).",
+  "birthday.gifted": "Gift given.",
+  "birthday.loved": "Loved gifts in your bag: {{items}}.",
+  "birthday.liked": "Liked gifts in your bag: {{items}}.",
+  "birthday.no-gift": "No loved or liked gifts in your bag.",
+  "birthday.empty": "No birthdays coming up.",
+
+  "bundle.line": "{{item}} ({{carried}}/{{needed}}): {{bundle}}, {{room}}",
+  "bundle.empty": "You aren't carrying anything an unfinished bundle needs.",
+  "quality.silver": " (silver)",
+  "quality.gold": " (gold)",
+  "quality.iridium": " (iridium)",
+
+  "season.days-left": "{{days}} days left in {{season}}.",
+  "season.last-day": "Today is the last day of {{season}}!",
+  "season.ready": "{{location}}: {{count}}x {{item}} ready now. Harvest before the season ends.",
+  "season.in-time": "{{location}}: {{count}}x {{item}} ready in {{days}} days, if watered.",
+  "season.wont-mature": "{{location}}: {{count}}x {{item}} won't mature before the season ends.",
+  "season.empty": "No crops at risk.",
+
+  "command.ledger": "Prints today's Morning Ledger to the console.",
+  "command.not-ready": "Load a save first.",
+
+  "config.general": "General",
+  "config.sections": "Sections",
+  "config.toggle-key": "Toggle key",
+  "config.toggle-key.tooltip": "Opens or closes the ledger.",
+  "config.auto-open": "Open each morning",
+  "config.auto-open.tooltip": "Show the ledger automatically when you wake up.",
+  "config.skip-if-empty": "Skip empty days",
+  "config.skip-if-empty.tooltip": "Don't open automatically when there's nothing to show.",
+  "config.include-machines": "Include machines",
+  "config.include-machines.tooltip": "Also count kegs, jars and other machines with finished output.",
+  "config.birthday-days": "Birthday lookahead (days)",
+  "config.birthday-days.tooltip": "How far ahead to list birthdays.",
+  "config.season-days": "Season-end warning (days)",
+  "config.season-days.tooltip": "Within this many days of season's end, list every crop that won't survive. Crops that can't mature in time are always listed."
+}
