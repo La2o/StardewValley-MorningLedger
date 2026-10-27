@@ -4,6 +4,16 @@ A daily planner for Stardew Valley. Every morning it opens one panel with everyt
 
 ![The Morning Ledger on the farm](docs/screenshots/ledger-overview.jpg)
 
+## How it's different
+
+Popular mods like Lookup Anything, Data Layers, and UI Info Suite 2 show details about whatever you point at, overlay the map you're standing on, or put icons on the HUD. Each covers one piece, and you have to go looking. Morning Ledger takes a different approach:
+
+- **One place, once a day.** One panel when you wake up, then it gets out of your way. Nothing stays on screen.
+- **The whole world, not the current screen.** It checks every farm building, the greenhouse, and the island at once, so you don't have to walk around or hover over each crop.
+- **Connects the pieces.** It cross-checks your inventory against birthdays and bundles: "Emily's birthday is tomorrow, and you're carrying an Amethyst" or "this Leek finishes Spring Foraging."
+- **Looks ahead.** It warns you before the season change wipes out crops that can't mature in time, a problem most info mods don't flag.
+- **Works alongside the others.** It doesn't patch the game or change any vanilla UI, so you can keep your favorite lookup and overlay mods.
+
 ## What it shows
 
 | Section | What's in it |
