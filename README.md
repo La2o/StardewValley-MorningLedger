@@ -2,7 +2,7 @@
 
 A daily planner for Stardew Valley. Every morning it opens one panel with everything worth knowing today, so you don't need a separate mod for each piece.
 
-![The Morning Ledger on the farm](docs/screenshots/ledger-overview.jpg)
+![The Morning Ledger on the farm](docs/screenshots/ledger-overview.png)
 
 ## How it's different
 
@@ -23,7 +23,7 @@ Popular mods like Lookup Anything, Data Layers, and UI Info Suite 2 show details
 | **Bundle items in your bag** | Anything in your inventory that an unfinished Community Center bundle still needs, with how many you have against how many it needs. Hidden until you can read the bundles, and on the Joja route or once the Community Center is restored. |
 | **Season's end** | Outdoor crops that won't survive into next season. Crops that can't mature before day 28 are always shown in red. In the last week, every crop still in the ground is listed, so you know what to harvest. |
 
-![Season's end warnings](docs/screenshots/season-end-warning.jpg)
+![Season's end warnings](docs/screenshots/season-end-warning.png)
 
 ## Controls
 
@@ -73,7 +73,7 @@ Type `ledger` in the SMAPI console to print today's ledger. This helps when repo
 2. Run `dotnet build MorningLedger`. The build finds the game automatically in standard Steam and GOG folders. Otherwise, set `GamePath` in `%USERPROFILE%\stardewvalley.targets`.
 3. Debug builds deploy straight to `Mods/MorningLedger`. Run `dotnet build MorningLedger -c Release` to create the release zip in `MorningLedger/bin/Release`.
 
-Debug builds also include a test helper. Press **F9** in game to run the setup commands listed in `Mods/MorningLedger/test-commands.txt`. The available commands are `day N`, `mail ID`, `item ID [count]`, `grow`, `warp LOCATION X Y`, and `ledger`. The helper is left out of release builds.
+Debug builds also include test helpers: **F10** saves a native-resolution screenshot (with the UI) to `Mods/MorningLedger/screenshots`, and **F9** in game to run the setup commands listed in `Mods/MorningLedger/test-commands.txt`. The available commands are `day N`, `mail ID`, `item ID [count]`, `grow`, `warp LOCATION X Y`, and `ledger`. The helper is left out of release builds.
 
 ## License
 

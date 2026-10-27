@@ -27,6 +27,9 @@ internal sealed class ModEntry : Mod
         helper.Events.Input.ButtonsChanged += OnButtonsChanged;
 
         helper.ConsoleCommands.Add("ledger", helper.Translation.Get("command.ledger"), (_, _) => DumpLedger());
+#if DEBUG
+        helper.Events.Display.Rendered += OnRendered;
+#endif
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -77,6 +80,8 @@ internal sealed class ModEntry : Mod
 #if DEBUG
         if (Context.IsWorldReady && e.Pressed.Contains(SButton.F9))
             RunTestCommands();
+        if (e.Pressed.Contains(SButton.F10))
+            captureNextFrame = true;
 #endif
         if (!Context.IsWorldReady || !config.ToggleKey.JustPressed())
             return;
@@ -113,6 +118,56 @@ internal sealed class ModEntry : Mod
     }
 
 #if DEBUG
+    private bool captureNextFrame;
+
+    /// <summary>Dev builds only: F10 saves the finished frame at native resolution to screenshots/ in the mod folder, for mod page images.</summary>
+    private void OnRendered(object? sender, RenderedEventArgs e)
+    {
+        if (!captureNextFrame)
+            return;
+        captureNextFrame = false;
+
+        var device = Game1.graphics.GraphicsDevice;
+        int w = device.PresentationParameters.BackBufferWidth, h = device.PresentationParameters.BackBufferHeight;
+        var pixels = new Microsoft.Xna.Framework.Color[w * h];
+        device.GetBackBufferData(pixels);
+        for (int i = 0; i < pixels.Length; i++)
+            pixels[i].A = 255; // the back buffer's alpha isn't meaningful
+
+        // Menus and the HUD are drawn to a separate UI target that's composited after this event, so blend it in here.
+        var ui = Game1.game1.uiScreen;
+        if (ui is { IsDisposed: false })
+        {
+            var uiPixels = new Microsoft.Xna.Framework.Color[ui.Width * ui.Height];
+            ui.GetData(uiPixels);
+            for (int y = 0; y < h; y++)
+            {
+                int uy = Math.Min(ui.Height - 1, y * ui.Height / h);
+                for (int x = 0; x < w; x++)
+                {
+                    var u = uiPixels[uy * ui.Width + Math.Min(ui.Width - 1, x * ui.Width / w)];
+                    if (u.A == 0)
+                        continue;
+                    ref var p = ref pixels[y * w + x];
+                    float keep = 1f - u.A / 255f; // UI is premultiplied alpha
+                    p = new Microsoft.Xna.Framework.Color(
+                        (byte)Math.Min(255, u.R + p.R * keep),
+                        (byte)Math.Min(255, u.G + p.G * keep),
+                        (byte)Math.Min(255, u.B + p.B * keep));
+                }
+            }
+        }
+
+        string dir = Path.Combine(Helper.DirectoryPath, "screenshots");
+        Directory.CreateDirectory(dir);
+        string path = Path.Combine(dir, $"capture-{DateTime.Now:HHmmss}.png");
+        using var texture = new Microsoft.Xna.Framework.Graphics.Texture2D(device, w, h);
+        texture.SetData(pixels);
+        using (var stream = File.Create(path))
+            texture.SaveAsPng(stream, w, h);
+        Monitor.Log($"[test] saved {w}x{h} capture to {path}", LogLevel.Info);
+    }
+
     /// <summary>
     /// Dev builds only: F9 runs each line of test-commands.txt in the mod folder, for setting up test scenarios in game
     /// (SMAPI 4 can't trigger console commands from code). Commands: day N, mail ID, item ID [count], grow, warp LOCATION X Y, ledger.
